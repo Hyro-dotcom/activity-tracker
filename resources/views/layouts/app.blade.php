@@ -32,6 +32,11 @@
     <main>
         {{ $slot }}
     </main>
+    
+    <!-- Page Footer -->
+    <footer class="py-6 text-center text-sm text-grey-500">
+        Activity Tracker · {{ date('Y') }}
+</footer>
 </div>
 </body>
 </html>
