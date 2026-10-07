@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Userzone;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\ActivitySession;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,10 @@ class ActivitySessionController extends Controller
      */
     public function create()
     {
-        //
+        // Load all activities, sorted by name, for the form's dropdown list.
+        $activities = Activity::orderBy('name')->get();
+
+        return view('userzone.sessions.create', ['activities' => $activities]);
     }
 
     /**

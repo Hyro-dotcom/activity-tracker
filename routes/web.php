@@ -28,6 +28,9 @@ Route::middleware('auth')->group(function () {
 
     // The logged-in user's own sessions
     Route::get('/sessions', [ActivitySessionController::class, 'index'])->name('sessions.index');
+    // The form for a new session. It must stay above /sessions/{session},
+    // or {session} would take the word "create" as a session id.
+    Route::get('/sessions/create', [ActivitySessionController::class, 'create'])->name('sessions.create');
     Route::get('/sessions/{session}', [ActivitySessionController::class, 'show'])->name('sessions.show');
 
     // For the user's profile management
