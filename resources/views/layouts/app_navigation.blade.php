@@ -19,6 +19,7 @@ Dashboard
             </div>
 
             <!-- Settings Dropdown -->
+             @auth
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-breeze.dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -51,6 +52,13 @@ Log Out
                     </x-slot>
                 </x-breeze.dropdown>
             </div>
+            @else
+                <!-- For visitors: links to log in or register -->
+                <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
+                    <a href="{{ route('login') }}" class="text-sm text-gray-500 hover:text-gray-700">Log in</a>
+                    <a href="{{ route('register') }}" class="text-sm text-gray-500 hover:text-gray-700">Register</a>
+                </div>
+            @endauth
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
@@ -73,6 +81,7 @@ Log Out
         </div>
 
         <!-- Responsive Settings Options -->
+         @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -96,5 +105,16 @@ Log Out
                 </form>
             </div>
         </div>
+        @else
+            <!-- For visitors: links to log in or register -->
+            <div class="pt-4 pb-1 border-t border-gray-200 space-y-1">
+                <x-breeze.responsive-nav-link :href="route('login')">
+                    Log in
+                </x-breeze.responsive-nav-link>
+                <x-breeze.responsive-nav-link :href="route('register')">
+                    Register
+                </x-breeze.responsive-nav-link>
+            </div>
+        @endauth
     </div>
 </nav>
