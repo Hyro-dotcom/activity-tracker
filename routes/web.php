@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Userzone\ActivitySessionController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
 use App\Http\Controllers\WelcomeController;
@@ -25,7 +26,9 @@ Route::middleware('auth')->group(function () {
     // For the user's dashboard (after login)
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    // Todo: add your Userzone routes here
+    // The logged-in user's own sessions
+    Route::get('/sessions', [ActivitySessionController::class, 'index'])->name('sessions.index');
+    Route::get('/sessions/{session}', [ActivitySessionController::class, 'show'])->name('sessions.show');
 
     // For the user's profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
