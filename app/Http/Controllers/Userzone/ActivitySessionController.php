@@ -39,7 +39,20 @@ class ActivitySessionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Check every field before anything is saved. If a rule fails, Laravel sends the
+        // browser back to the form with error messages, and the lines below don't run.
+        $validated = $request->validate([
+            'activity_id' => ['required', 'exists:activities,id'],
+            'date' => ['required', 'date', 'before_or_equal:today'],
+            'duration' => ['required', 'integer', 'min:1', 'max:1440'],
+            'notes' => ['nullable', 'string', 'max:140'],
+        ]);
+
+        // Save the session for the logged-in user. The relationship fills in user_id.
+        $session = auth()->user()->activitySessions()->create($validated);
+
+        // Show the new session's detail page.
+        return redirect()->route('sessions.show', $session);
     }
 
     /**

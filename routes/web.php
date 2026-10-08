@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     // The form for a new session. It must stay above /sessions/{session},
     // or {session} would take the word "create" as a session id.
     Route::get('/sessions/create', [ActivitySessionController::class, 'create'])->name('sessions.create');
+    // Receives the form from /sessions/create. Same address as the list, but POST instead of GET.
+    Route::post('/sessions', [ActivitySessionController::class, 'store'])->name('sessions.store');
     Route::get('/sessions/{session}', [ActivitySessionController::class, 'show'])->name('sessions.show');
 
     // For the user's profile management

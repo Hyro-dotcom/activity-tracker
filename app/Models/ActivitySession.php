@@ -10,6 +10,10 @@ class ActivitySession extends Model
 {
     /** @use HasFactory<\Database\Factories\ActivitySessionFactory> */
     use HasFactory;
+
+    // Fields that create() may fill from a form. user_id is deliberately missing:
+    // it comes from the logged-in user through the relationship, never from the form.
+    protected $fillable = ['activity_id', 'date', 'duration', 'notes'];
     // A session belongs to the user who logged it.
     public function user(): BelongsTo
     {
