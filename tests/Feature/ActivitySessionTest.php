@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\ActivitySession;
+use App\Models\Activity;
 use App\Models\User;
 
 test('the sessions list shows only my own sessions', function () {
@@ -34,4 +35,26 @@ test('other users get 403 on a session detail page', function () {
     $response = $this->actingAs($otherUser)->get(route('sessions.show', $session));
 
     $response->assertForbidden();
+});
+test('a logged-in user can create a session that belongs to them', function () {
+    // Arrange: a user, and an activity the form can choose.
+    $user = User::factory()->create();
+    $activity = Activity::factory()->create();
+
+    // Act: send the form as that user, the way the browser does.
+    $response = $this->actingAs($user)->post(route('sessions.store'), [
+        'activity_id' => $activity->id,
+        'date' => '2026-10-01',
+        'duration' => 45,
+        'notes' => 'Easy pace',
+    ]);
+
+    // Assert: the session is saved for this user, and the browser is sent to its detail page.
+    $this->assertDatabaseHas('activity_sessions', [
+        'user_id' => $user->id,
+        'activity_id' => $activity->id,
+        'date' => '2026-10-01',
+        'duration' => 45,
+    ]);
+    $response->assertRedirect(route('sessions.show', ActivitySession::first()));
 });
