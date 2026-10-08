@@ -36,6 +36,7 @@ test('other users get 403 on a session detail page', function () {
 
     $response->assertForbidden();
 });
+
 test('a logged-in user can create a session that belongs to them', function () {
     // Arrange: a user, and an activity the form can choose.
     $user = User::factory()->create();
@@ -57,4 +58,23 @@ test('a logged-in user can create a session that belongs to them', function () {
         'duration' => 45,
     ]);
     $response->assertRedirect(route('sessions.show', ActivitySession::first()));
+});
+
+test('invalid input is refused with error messages', function () {
+    // Arrange: a logged-in user.
+    $user = User::factory()->create();
+
+    // Act: send the form with empty required fields, coming from the create page.
+    $response = $this->actingAs($user)
+        ->from(route('sessions.create'))
+        ->post(route('sessions.store'), [
+            'activity_id' => '',
+            'date' => '',
+            'duration' => '',
+        ]);
+
+    // Assert: back to the form, an error for each required field, and nothing saved.
+    $response->assertRedirect(route('sessions.create'));
+    $response->assertSessionHasErrors(['activity_id', 'date', 'duration']);
+    $this->assertDatabaseCount('activity_sessions', 0);
 });
