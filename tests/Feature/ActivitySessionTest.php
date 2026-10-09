@@ -78,3 +78,44 @@ test('invalid input is refused with error messages', function () {
     $response->assertSessionHasErrors(['activity_id', 'date', 'duration']);
     $this->assertDatabaseCount('activity_sessions', 0);
 });
+
+test('the owner can update their session', function () {
+    // Arrange: a session of this user, and another activity to switch to.
+    $user = User::factory()->create();
+    $session = ActivitySession::factory()->create(['user_id' => $user->id]);
+    $activity = Activity::factory()->create();
+
+    // Act: send the edit form as the owner.
+    $response = $this->actingAs($user)->patch(route('sessions.update', $session), [
+        'activity_id' => $activity->id,
+        'date' => '2026-10-02',
+        'duration' => 60,
+        'notes' => 'Changed',
+    ]);
+
+    // Assert: this row has the new values, and the browser goes to the detail page.
+    $this->assertDatabaseHas('activity_sessions', [
+        'id' => $session->id,
+        'activity_id' => $activity->id,
+        'duration' => 60,
+        'notes' => 'Changed',
+    ]);
+    $response->assertRedirect(route('sessions.show', $session));
+});
+
+test('other users get 403 when updating a session', function () {
+    // Arrange: a session with a known duration, and a different logged-in user.
+    $session = ActivitySession::factory()->create(['duration' => 30]);
+    $otherUser = User::factory()->create();
+
+    // Act: the other user sends changes.
+    $response = $this->actingAs($otherUser)->patch(route('sessions.update', $session), [
+        'activity_id' => $session->activity_id,
+        'date' => '2026-10-02',
+        'duration' => 99,
+    ]);
+
+    // Assert: refused, and the duration is unchanged.
+    $response->assertForbidden();
+    $this->assertDatabaseHas('activity_sessions', ['id' => $session->id, 'duration' => 30]);
+});
