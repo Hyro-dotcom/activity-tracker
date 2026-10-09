@@ -10,6 +10,7 @@
             <p><span class="font-semibold">Duration:</span> {{ $session->duration }} min</p>
             <p><span class="font-semibold">Notes:</span> {{ $session->notes ?? 'No notes.' }}</p>
         </section>
+        <a href="{{ route('sessions.edit', $session) }}" class="inline-block mr-4 rounded-md bg-gray-800 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700">Edit session</a>
 
         <a href="{{ route('sessions.index') }}" class="text-sm text-gray-600 hover:text-gray-900">← Back to my sessions</a>
     </div>
