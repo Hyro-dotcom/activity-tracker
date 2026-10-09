@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/sessions/{session}/edit', [ActivitySessionController::class, 'edit'])->name('sessions.edit');
     // Receives the edit form. Same address as the detail page, but PATCH instead of GET.
     Route::patch('/sessions/{session}', [ActivitySessionController::class, 'update'])->name('sessions.update');
+    // Deletes one of your sessions. Same address as the detail page, but DELETE.
+    Route::delete('/sessions/{session}', [ActivitySessionController::class, 'destroy'])->name('sessions.destroy');    
 
     // For the user's profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

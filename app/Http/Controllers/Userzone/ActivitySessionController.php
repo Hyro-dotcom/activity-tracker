@@ -112,8 +112,17 @@ class ActivitySessionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(ActivitySession $session)
     {
-        //
+        // Only the owner may delete a session. Everyone else gets "403 Forbidden".
+        if ($session->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Remove this session's row from activity_sessions.
+        $session->delete();
+
+        // The session is gone, and so is its detail page: back to the list.
+        return redirect()->route('sessions.index');
     }
 }
