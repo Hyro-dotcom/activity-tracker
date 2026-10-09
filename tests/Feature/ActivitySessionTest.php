@@ -119,3 +119,29 @@ test('other users get 403 when updating a session', function () {
     $response->assertForbidden();
     $this->assertDatabaseHas('activity_sessions', ['id' => $session->id, 'duration' => 30]);
 });
+
+test('the owner can delete their session', function () {
+    // Arrange: a session that belongs to this user.
+    $user = User::factory()->create();
+    $session = ActivitySession::factory()->create(['user_id' => $user->id]);
+
+    // Act: the owner sends the delete form.
+    $response = $this->actingAs($user)->delete(route('sessions.destroy', $session));
+
+    // Assert: the row is gone, and the browser goes back to the list.
+    $this->assertDatabaseMissing('activity_sessions', ['id' => $session->id]);
+    $response->assertRedirect(route('sessions.index'));
+});
+
+test('other users get 403 when deleting a session', function () {
+    // Arrange: a session (the factory creates its owner) and a different user.
+    $session = ActivitySession::factory()->create();
+    $otherUser = User::factory()->create();
+
+    // Act: the other user tries to delete it.
+    $response = $this->actingAs($otherUser)->delete(route('sessions.destroy', $session));
+
+    // Assert: refused, and the row is still there.
+    $response->assertForbidden();
+    $this->assertDatabaseHas('activity_sessions', ['id' => $session->id]);
+});
