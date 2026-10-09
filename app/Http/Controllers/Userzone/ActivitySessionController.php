@@ -71,17 +71,42 @@ class ActivitySessionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(ActivitySession $session)
     {
-        //
+        // Only the owner may edit a session. Everyone else gets "403 Forbidden".
+        if ($session->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Load all activities, sorted by name, for the form's drop-down list.
+        $activities = Activity::orderBy('name')->get();
+
+        return view('userzone.sessions.edit', ['session' => $session, 'activities' => $activities]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, ActivitySession $session)
     {
-        //
+        // Only the owner may change a session. Everyone else gets "403 Forbidden".
+        if ($session->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // The same rules as in store(): check every field before anything is saved.
+        $validated = $request->validate([
+            'activity_id' => ['required', 'exists:activities,id'],
+            'date' => ['required', 'date', 'before_or_equal:today'],
+            'duration' => ['required', 'integer', 'min:1', 'max:1440'],
+            'notes' => ['nullable', 'string', 'max:140'],
+        ]);
+
+        // Save the changes. $fillable allows exactly these four fields.
+        $session->update($validated);
+
+        // Show the changed session's detail page.
+        return redirect()->route('sessions.show', $session);
     }
 
     /**

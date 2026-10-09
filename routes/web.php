@@ -34,6 +34,10 @@ Route::middleware('auth')->group(function () {
     // Receives the form from /sessions/create. Same address as the list, but POST instead of GET.
     Route::post('/sessions', [ActivitySessionController::class, 'store'])->name('sessions.store');
     Route::get('/sessions/{session}', [ActivitySessionController::class, 'show'])->name('sessions.show');
+    // The form for changing one of your sessions.
+    Route::get('/sessions/{session}/edit', [ActivitySessionController::class, 'edit'])->name('sessions.edit');
+    // Receives the edit form. Same address as the detail page, but PATCH instead of GET.
+    Route::patch('/sessions/{session}', [ActivitySessionController::class, 'update'])->name('sessions.update');
 
     // For the user's profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
