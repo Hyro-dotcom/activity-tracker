@@ -11,6 +11,10 @@
             <p><span class="font-semibold">Notes:</span> {{ $session->notes ?? 'No notes.' }}</p>
         </section>
         <a href="{{ route('sessions.edit', $session) }}" class="inline-block mr-4 rounded-md bg-gray-800 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700">Edit session</a>
+        <form method="POST" action="{{ route('sessions.destroy', $session) }}" class="inline-block mr-4">
+            @csrf
+            @method('DELETE')
+            <button type="submit" onclick="return confirm('Delete this session for good?')" class="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500">Delete session</button>        </form>
 
         <a href="{{ route('sessions.index') }}" class="text-sm text-gray-600 hover:text-gray-900">← Back to my sessions</a>
     </div>
