@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Userzone\ActivityController;
 use App\Http\Controllers\Userzone\ActivitySessionController;
 use App\Http\Controllers\Userzone\DashboardController;
 use App\Http\Controllers\Userzone\ProfileController;
@@ -45,4 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // The list of all activities. They are shared, so every logged-in user sees the same list.
+    Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
 });
