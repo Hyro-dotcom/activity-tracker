@@ -18,6 +18,9 @@ Dashboard
                     <x-breeze.nav-link :href="route('sessions.index')" :active="request()->routeIs('sessions.*')">
                         My sessions
                     </x-breeze.nav-link>
+                    <x-breeze.nav-link :href="route('activities.index')" :active="request()->routeIs('activities.*')">
+                        Activities
+                    </x-breeze.nav-link>
                 </div>
             </div>
 
@@ -83,6 +86,9 @@ Log Out
             </x-breeze.responsive-nav-link>
             <x-breeze.responsive-nav-link :href="route('sessions.index')" :active="request()->routeIs('sessions.*')">
                 My sessions
+            </x-breeze.responsive-nav-link>
+            <x-breeze.responsive-nav-link :href="route('activities.index')" :active="request()->routeIs('activities.*')">
+                Activities
             </x-breeze.responsive-nav-link>
         </div>
 
