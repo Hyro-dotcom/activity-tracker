@@ -49,4 +49,8 @@ Route::middleware('auth')->group(function () {
 
     // The list of all activities. They are shared, so every logged-in user sees the same list.
     Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+    // The form for a new activity.
+    Route::get('/activities/create', [ActivityController::class, 'create'])->name('activities.create');
+    // Receives the form from /activities/create. Same address as the list, but POST instead of GET.
+    Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
 });

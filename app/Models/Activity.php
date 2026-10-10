@@ -10,6 +10,9 @@ class Activity extends Model
 {
     /** @use HasFactory<\Database\Factories\ActivityFactory> */
     use HasFactory;
+
+    // Fields that create() may fill from the activity form.
+    protected $fillable = ['name', 'description'];
     // An Activity can appear in many sessions, from any user
     public function activitySessions(): HasMany
     {
