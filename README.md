@@ -1,3 +1,52 @@
+# Activity Tracker
+
+A simple Laravel app for logging training sessions, built on the lecturer's starter pack (`ndeblauw/starterpack`) as a class project.
+
+- **Activities** (for example "5k Run" or "Beach Volleyball") are shared by all users.
+- **Sessions** belong to one user: an activity, a date, a duration in minutes and optional notes. In the code, a session is the `ActivitySession` model.
+- The public homepage shows the community's 5 most recent sessions, without names.
+
+## Requirements
+
+- PHP 8.4 or newer
+- Composer
+- SQLite (included with PHP on most systems)
+
+No Node or npm is needed: Tailwind CSS and Alpine JS are loaded from a CDN.
+
+## Setup
+
+```bash
+git clone https://github.com/Hyro-dotcom/activity-tracker.git
+cd activity-tracker
+composer install
+cp .env.example .env
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate:fresh --seed
+```
+
+## Run
+
+- **With Laravel Herd:** clone into your Herd folder (for example `~/Herd`) and open `http://activity-tracker.test`. Herd names the site after the folder.
+- **Without Herd:** run `php artisan serve` and open `http://127.0.0.1:8000`.
+
+## Log in
+
+The seeder creates an admin account:
+
+- Email: `admin@admin.com`
+- Password: `password`
+
+It also creates 4 random users, 8 activities and 30 sessions. You can register a new account as well.
+
+## Tests
+
+```bash
+php artisan test
+```
+
+---
 <p align="center" style="font-size: 24px; margin-bottom: -25px; color: #EF3B2D;">
     <strong>Educational<br/> Starter Pack<br/></strong><span style="color:gray">for</span>
 </p>
